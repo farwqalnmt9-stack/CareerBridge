@@ -1,0 +1,29 @@
+{% load static i18n %}{% get_current_language as LANGUAGE_CODE %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#7C3AED">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'opportunities/css/style.css' %}">
+  <title>{% block title %}CareerBridge{% endblock %}</title>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">{% if LANGUAGE_CODE == 'ar' %}انتقل إلى المحتوى{% else %}Skip to content{% endif %}</a>
+  <header class="site-header"><nav class="container navbar navbar-expand-lg" aria-label="Primary">
+    <a class="brand" href="{% url 'opportunities:home' %}"><span class="brand-mark" aria-hidden="true">CB</span><span>CareerBridge</span></a>
+    <button class="navbar-toggler menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <div class="collapse navbar-collapse" id="mainNav"><ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+      <li class="nav-item"><a class="nav-link" href="{% url 'opportunities:home' %}">{% if LANGUAGE_CODE == 'ar' %}الرئيسية{% else %}Home{% endif %}</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'opportunities:list' %}">{% if LANGUAGE_CODE == 'ar' %}الفرص{% else %}Opportunities{% endif %}</a></li>
+      <li class="nav-item"><a class="nav-link" href="#how-it-works">{% if LANGUAGE_CODE == 'ar' %}كيف تعمل{% else %}How it works{% endif %}</a></li>
+      <li class="nav-item"><form action="{% url 'set_language' %}" method="post" class="language-form">{% csrf_token %}<input type="hidden" name="language" value="{% if LANGUAGE_CODE == 'ar' %}en{% else %}ar{% endif %}"><input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="language-switch" type="submit">{% if LANGUAGE_CODE == 'ar' %}English{% else %}العربية{% endif %}</button></form></li>
+      {% if user.is_authenticated %}<li class="nav-item"><a class="button button-small" href="{% url 'opportunities:dashboard' %}">{% if LANGUAGE_CODE == 'ar' %}لوحتي{% else %}My dashboard{% endif %}</a></li><li class="nav-item"><form action="{% url 'opportunities:logout' %}" method="post">{% csrf_token %}<button class="nav-link border-0 bg-transparent" type="submit">{% if LANGUAGE_CODE == 'ar' %}خروج{% else %}Log out{% endif %}</button></form></li>{% else %}<li class="nav-item"><a class="button button-small" href="{% url 'opportunities:sign_up' %}">{% if LANGUAGE_CODE == 'ar' %}ابدأ الآن{% else %}Get started{% endif %}</a></li>{% endif %}
+    </ul></div>
+  </nav></header>
+  <main id="main-content" tabindex="-1">{% if messages %}<div class="container messages" aria-live="polite">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
+  <footer class="site-footer"><div class="container d-flex flex-wrap justify-content-between gap-3"><span>© 2026 CareerBridge</span><span>{% if LANGUAGE_CODE == 'ar' %}فرص حقيقية. خطوات واثقة.{% else %}Real opportunities. Confident steps.{% endif %}</span></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script><script src="{% static 'opportunities/js/main.js' %}"></script>
+</body></html>
